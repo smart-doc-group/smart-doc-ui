@@ -5,7 +5,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import StarBorder from '@material-ui/icons/StarBorder';
@@ -23,10 +22,60 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+type TMethod = 'get' | 'post' | 'put' | 'delete';
+
+export interface IPaths {
+  [x: string]: {
+    // eslint-disable-next-line no-unused-vars
+    [P in TMethod]?: {
+      tags: string[];
+      desc?: string;
+      operationId?: string;
+      parameters?: unknown;
+      responses?: any;
+      deprecated?: boolean;
+    };
+  };
+}
+export interface IInfo {
+  tags: { name: string; description?: string }[];
+  paths: IPaths;
+}
+
+const initData = (info: IInfo) => {
+  const { tags, paths } = info;
+  const tempData: any[] = [];
+  tags.forEach((i, index) => {
+    tempData[index] = {
+      ...i,
+      paths: [],
+    };
+    for (const j in paths) {
+      if (paths[j].get) {
+        if (paths[j].get.tags.includes(i.name)) {
+          tempData[index].paths.push(paths[j].get);
+        }
+        if (paths[j].post) {
+          tempData[index].paths.push(paths[j].post);
+        }
+        if (paths[j].put) {
+          tempData[index].paths.push(paths[j].put);
+        }
+        if (paths[j].delete) {
+          tempData[index].paths.push(paths[j].delete);
+        }
+      }
+    }
+  });
+  return tempData;
+};
+
 const RequestList = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
-  const [data] = useState<any>(info);
+  const [data] = useState<any>(initData(info));
+
+  console.log(data);
 
   const handleClick = () => {
     setOpen(!open);
@@ -38,13 +87,10 @@ const RequestList = () => {
       aria-labelledby="nested-list-subheader"
       className={classes.root}
     >
-      {data.tags.map((item: any) => (
+      {data.map((item: any) => (
         <Fragment key={item.name}>
           <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-              <InboxIcon />
-            </ListItemIcon>
-            <ListItemText primary="Inbox" />
+            <ListItemText primary={item.name} secondary={item.description} />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
