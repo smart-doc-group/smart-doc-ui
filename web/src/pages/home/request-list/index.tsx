@@ -2,13 +2,12 @@ import React, { Fragment, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
 import { info } from '../../../mock-data';
+import { IconButton, ListItemSecondaryAction } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,6 +20,22 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+
+export interface IDataItem {
+  name: string;
+  description?: string;
+  collapsing: boolean;
+  paths: {
+    tags: string[];
+    desc?: string;
+    operationId?: string;
+    parameters?: unknown;
+    responses?: any;
+    path: string;
+    deprecated?: boolean;
+    method: TMethod;
+  }[];
+}
 
 type TMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -37,6 +52,7 @@ export interface IPaths {
     };
   };
 }
+
 export interface IInfo {
   tags: { name: string; description?: string }[];
   paths: IPaths;
@@ -44,25 +60,42 @@ export interface IInfo {
 
 const initData = (info: IInfo) => {
   const { tags, paths } = info;
-  const tempData: any[] = [];
+  const tempData: IDataItem[] = [];
   tags.forEach((i, index) => {
     tempData[index] = {
       ...i,
+      collapsing: false,
       paths: [],
     };
     for (const j in paths) {
       if (paths[j].get) {
         if (paths[j].get.tags.includes(i.name)) {
-          tempData[index].paths.push(paths[j].get);
+          tempData[index].paths.push({
+            ...paths[j].get,
+            path: j,
+            method: 'get',
+          });
         }
         if (paths[j].post) {
-          tempData[index].paths.push(paths[j].post);
+          tempData[index].paths.push({
+            ...paths[j].post,
+            path: j,
+            method: 'post',
+          });
         }
         if (paths[j].put) {
-          tempData[index].paths.push(paths[j].put);
+          tempData[index].paths.push({
+            ...paths[j].put,
+            path: j,
+            method: 'put',
+          });
         }
         if (paths[j].delete) {
-          tempData[index].paths.push(paths[j].delete);
+          tempData[index].paths.push({
+            ...paths[j].delete,
+            path: j,
+            method: 'delete',
+          });
         }
       }
     }
@@ -72,13 +105,14 @@ const initData = (info: IInfo) => {
 
 const RequestList = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
-  const [data] = useState<any>(initData(info));
+  const [data] = useState<IDataItem[]>(initData(info));
+  // be used to update list
+  const [, setCount] = useState(0);
 
-  console.log(data);
-
-  const handleClick = () => {
-    setOpen(!open);
+  const handleClick = (dataItem: IDataItem) => {
+    dataItem.collapsing = !dataItem.collapsing;
+    setCount((p) => p + 1);
+    console.log(dataItem);
   };
 
   return (
@@ -87,20 +121,25 @@ const RequestList = () => {
       aria-labelledby="nested-list-subheader"
       className={classes.root}
     >
-      {data.map((item: any) => (
+      {data.map((item) => (
         <Fragment key={item.name}>
-          <ListItem button onClick={handleClick}>
+          <ListItem button onClick={() => handleClick(item)}>
             <ListItemText primary={item.name} secondary={item.description} />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText primary="Starred" />
-              </ListItem>
+              {item.paths.map((i, index) => (
+                // need to change `index` to other later
+                <ListItem key={index} button className={classes.nested}>
+                  <ListItemText primary={i.path} />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="comments">
+                      <i className="iconfont icon-copy"></i>
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
             </List>
           </Collapse>
         </Fragment>

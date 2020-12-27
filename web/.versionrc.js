@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 `,
   types: [
     {type: "feat", section: "Features"},
+    {type: "feat(web)", section: "Features"},
     {type: "fix", section: "Bug Fixes"},
     {type: "chore", hidden: true},
     {type: "docs", hidden: true},

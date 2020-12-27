@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Homa from './pages/home';
+import Home from './pages/home';
 
-ReactDOM.render(<Homa />, document.getElementById('root'));
+import './index.css';
+
+ReactDOM.render(<Home />, document.getElementById('root'));
