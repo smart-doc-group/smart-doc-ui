@@ -2,12 +2,12 @@ import React, { Fragment, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import { Tooltip } from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import { info } from '../../../mock-data';
 import { IconButton, ListItemSecondaryAction } from '@material-ui/core';
+import CopyAlert from './CopyAlert';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -106,6 +106,7 @@ const initData = (info: IInfo) => {
 const RequestList = () => {
   const classes = useStyles();
   const [data] = useState<IDataItem[]>(initData(info));
+  const [copyAlertOpen, setCopyAlertOpen] = useState(false);
   // be used to update list
   const [, setCount] = useState(0);
 
@@ -116,35 +117,78 @@ const RequestList = () => {
   };
 
   return (
-    <List
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      className={classes.root}
-    >
-      {data.map((item) => (
-        <Fragment key={item.name}>
-          <ListItem button onClick={() => handleClick(item)}>
-            <ListItemText primary={item.name} secondary={item.description} />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {item.paths.map((i, index) => (
-                // need to change `index` to other later
-                <ListItem key={index} button className={classes.nested}>
-                  <ListItemText primary={i.path} />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="comments">
-                      <i className="iconfont icon-copy"></i>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Collapse>
-        </Fragment>
-      ))}
-    </List>
+    <>
+      <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className={classes.root}
+      >
+        {data.map((item) => (
+          <Fragment key={item.name}>
+            <ListItem button onClick={() => handleClick(item)}>
+              <ListItemText primary={item.name} secondary={item.description} />
+              {!!item.paths.length ? (
+                item.collapsing ? (
+                  <IconButton color="inherit" edge="end" aria-label="comments">
+                    <i className="iconfont icon-fold"></i>
+                  </IconButton>
+                ) : (
+                  <IconButton color="inherit" edge="end" aria-label="comments">
+                    <i className="iconfont icon-unfold"></i>
+                  </IconButton>
+                )
+              ) : (
+                <Tooltip title="There is no API here" placement="top" arrow>
+                  <i className="iconfont icon-no-data"></i>
+                </Tooltip>
+              )}
+            </ListItem>
+            {!!item.paths.length && (
+              <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {item.paths.map((i, index) => (
+                    // need to change `index` to other later
+                    <ListItem
+                      key={index}
+                      button
+                      className={classes.nested}
+                      onClick={() => {
+                        setCopyAlertOpen(true);
+                        navigator.clipboard.writeText(i.path);
+                      }}
+                    >
+                      <ListItemText primary={i.path} />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="comments"
+                          onClick={() => {
+                            navigator.clipboard.writeText(i.path);
+                          }}
+                        >
+                          <i className="iconfont icon-api-test"></i>
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          aria-label="comments"
+                          onClick={() => {
+                            setCopyAlertOpen(true);
+                            navigator.clipboard.writeText(i.path);
+                          }}
+                        >
+                          <i className="iconfont icon-copy"></i>
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            )}
+          </Fragment>
+        ))}
+      </List>
+      <CopyAlert open={copyAlertOpen} onClose={() => setCopyAlertOpen(false)} />
+    </>
   );
 };
 
