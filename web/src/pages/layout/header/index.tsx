@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '160px',
     marginLeft: '8px',
   },
+  homeBtn: {
+    color: 'white',
+  },
 }));
 
 const Header = () => {
@@ -22,7 +25,9 @@ const Header = () => {
   return (
     <React.Fragment>
       <Toolbar className={classes.toolbar}>
-        <Button size="small">smart-doc</Button>
+        <Button size="small" className={classes.homeBtn}>
+          smart-doc
+        </Button>
         <div>
           <Typography variant="body1">
             Select a spec
