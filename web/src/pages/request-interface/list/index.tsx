@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import { Tooltip } from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import { info } from '../../../mock-data';
+import { info } from 'src/mock-data/request-list';
 import { IconButton, ListItemSecondaryAction } from '@material-ui/core';
 import CopyAlert from './CopyAlert';
 
@@ -103,7 +103,7 @@ const initData = (info: IInfo) => {
   return tempData;
 };
 
-const RequestList = () => {
+const RequestInterfaceList = () => {
   const classes = useStyles();
   const [data] = useState<IDataItem[]>(initData(info));
   const [copyAlertOpen, setCopyAlertOpen] = useState(false);
@@ -113,7 +113,6 @@ const RequestList = () => {
   const handleClick = (dataItem: IDataItem) => {
     dataItem.collapsing = !dataItem.collapsing;
     setCount((p) => p + 1);
-    console.log(dataItem);
   };
 
   return (
@@ -130,16 +129,16 @@ const RequestList = () => {
               {!!item.paths.length ? (
                 item.collapsing ? (
                   <IconButton color="inherit" edge="end" aria-label="comments">
-                    <i className="iconfont icon-fold"></i>
+                    <i className="iconfont icon-fold" />
                   </IconButton>
                 ) : (
                   <IconButton color="inherit" edge="end" aria-label="comments">
-                    <i className="iconfont icon-unfold"></i>
+                    <i className="iconfont icon-unfold" />
                   </IconButton>
                 )
               ) : (
                 <Tooltip title="There is no API here" placement="top" arrow>
-                  <i className="iconfont icon-no-data"></i>
+                  <i className="iconfont icon-no-data" />
                 </Tooltip>
               )}
             </ListItem>
@@ -166,7 +165,7 @@ const RequestList = () => {
                             navigator.clipboard.writeText(i.path);
                           }}
                         >
-                          <i className="iconfont icon-api-test"></i>
+                          <i className="iconfont icon-api-test" />
                         </IconButton>
                         <IconButton
                           edge="end"
@@ -176,7 +175,7 @@ const RequestList = () => {
                             navigator.clipboard.writeText(i.path);
                           }}
                         >
-                          <i className="iconfont icon-copy"></i>
+                          <i className="iconfont icon-copy" />
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
@@ -192,4 +191,4 @@ const RequestList = () => {
   );
 };
 
-export default RequestList;
+export default RequestInterfaceList;

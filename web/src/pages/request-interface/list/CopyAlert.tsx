@@ -20,7 +20,7 @@ const CopyAlert = (props: CopyAlertProps) => {
       }
       props.onClose?.();
     },
-    []
+    [props]
   );
 
   return (

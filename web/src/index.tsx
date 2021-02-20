@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './pages/home';
 
 import './index.css';
+import RouterView from './components/RouterView';
+import router from './router';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<Home />, document.getElementById('root'));
+ReactDOM.render(
+  <BrowserRouter>
+    <RouterView router={router} />
+  </BrowserRouter>,
+  document.getElementById('root')
+);

@@ -1,10 +1,17 @@
 import React from 'react';
+import { IRouterItem } from 'src/router';
+import Main from './main';
 import SideMenu from './side-menu';
 
-const Layout = () => {
+interface ILayoutProps {
+  router: IRouterItem[];
+}
+
+const Layout = (props: ILayoutProps) => {
   return (
     <>
-      <SideMenu></SideMenu>
+      <SideMenu />
+      <Main router={props.router} />
     </>
   );
 };

@@ -38,6 +38,7 @@ module.exports = {
       'error',
       { semi: true, endOfLine: 'auto', singleQuote: true },
     ],
+    'react/self-closing-comp': 2,
   },
   ignorePatterns: ['dist', 'build', 'lib'],
 };

@@ -2,11 +2,8 @@ import React, { Fragment, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { Tooltip } from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import { IconButton } from '@material-ui/core';
-import { menuItemList } from '../../../mock-data/menu';
+import { menuItemList } from 'src/mock-data/menu';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,13 +17,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-console.log(menuItemList);
+export interface IMenuItem {
+  name: string;
+  description?: string;
+  id: number;
+  collapsing: boolean;
+}
 
 const SideMenu = () => {
   const classes = useStyles();
 
+  const [data] = useState(menuItemList);
   // be used to update list
-  //   const [, setCount] = useState(0);
+  const [, setCount] = useState(0);
+
+  const handleClick = (dataItem: IMenuItem) => {
+    dataItem.collapsing = !dataItem.collapsing;
+    setCount((p) => p + 1);
+  };
 
   return (
     <>
@@ -39,7 +47,7 @@ const SideMenu = () => {
           <Fragment key={item.name}>
             <ListItem button onClick={() => handleClick(item)}>
               <ListItemText primary={item.name} secondary={item.description} />
-              {!!item.paths.length ? (
+              {/* {!!item.paths.length ? (
                 item.collapsing ? (
                   <IconButton color="inherit" edge="end" aria-label="comments">
                     <i className="iconfont icon-fold"></i>
@@ -53,9 +61,9 @@ const SideMenu = () => {
                 <Tooltip title="There is no API here" placement="top" arrow>
                   <i className="iconfont icon-no-data"></i>
                 </Tooltip>
-              )}
+              )} */}
             </ListItem>
-            {!!item.paths.length && (
+            {/* {!!item.paths.length && (
               <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.paths.map((i, index) => (
@@ -71,7 +79,7 @@ const SideMenu = () => {
                   ))}
                 </List>
               </Collapse>
-            )}
+            )} */}
           </Fragment>
         ))}
       </List>
