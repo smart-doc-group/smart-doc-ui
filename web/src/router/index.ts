@@ -11,9 +11,9 @@ export interface IRouterItem {
 const router: IRouterItem[] = [
   {
     component: Layout,
-    path: '/home',
+    path: '/',
     name: 'basicLayout',
-    children: [{ path: '/home/api', name: 'api', component: RequestInterface }],
+    children: [{ path: '/', name: 'api', component: RequestInterface }],
   },
 ];
 

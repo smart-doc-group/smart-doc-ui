@@ -1,6 +1,7 @@
-import { Button, Drawer } from '@material-ui/core';
-import React, { useState } from 'react';
+import { Drawer } from '@material-ui/core';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { RequestInterfaceCtx } from '..';
 
 const useStyles = makeStyles({
   list: {
@@ -10,16 +11,16 @@ const useStyles = makeStyles({
 
 const RequestPanel = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const visible = useContext(RequestInterfaceCtx.getContext('panelStatus'))
+    .visible;
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Request</Button>
       <Drawer
         anchor={'right'}
         elevation={100}
-        open={open}
+        open={visible}
         onClose={() => {
-          setOpen(false);
+          RequestInterfaceCtx.dispatch('updatePanelStatus', { visible: false });
         }}
       >
         <div className={classes.list}>test</div>

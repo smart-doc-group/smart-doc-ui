@@ -47,39 +47,7 @@ const SideMenu = () => {
           <Fragment key={item.name}>
             <ListItem button onClick={() => handleClick(item)}>
               <ListItemText primary={item.name} secondary={item.description} />
-              {/* {!!item.paths.length ? (
-                item.collapsing ? (
-                  <IconButton color="inherit" edge="end" aria-label="comments">
-                    <i className="iconfont icon-fold"></i>
-                  </IconButton>
-                ) : (
-                  <IconButton color="inherit" edge="end" aria-label="comments">
-                    <i className="iconfont icon-unfold"></i>
-                  </IconButton>
-                )
-              ) : (
-                <Tooltip title="There is no API here" placement="top" arrow>
-                  <i className="iconfont icon-no-data"></i>
-                </Tooltip>
-              )} */}
             </ListItem>
-            {/* {!!item.paths.length && (
-              <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {item.paths.map((i, index) => (
-                    // need to change `index` to other later
-                    <ListItem
-                      key={index}
-                      button
-                      className={classes.nested}
-                      onClick={() => {}}
-                    >
-                      <ListItemText primary={i.path} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Collapse>
-            )} */}
           </Fragment>
         ))}
       </List>

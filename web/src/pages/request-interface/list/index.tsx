@@ -8,6 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import { info } from 'src/mock-data/request-list';
 import { IconButton, ListItemSecondaryAction } from '@material-ui/core';
 import CopyAlert from './CopyAlert';
+import { RequestInterfaceCtx } from '..';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -146,7 +147,7 @@ const RequestInterfaceList = () => {
               <Collapse in={item.collapsing} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                   {item.paths.map((i, index) => (
-                    // need to change `index` to other later
+                    // need to change `index` into other later
                     <ListItem
                       key={index}
                       button
@@ -162,7 +163,9 @@ const RequestInterfaceList = () => {
                           edge="end"
                           aria-label="comments"
                           onClick={() => {
-                            navigator.clipboard.writeText(i.path);
+                            RequestInterfaceCtx.dispatch('updatePanelStatus', {
+                              visible: true,
+                            });
                           }}
                         >
                           <i className="iconfont icon-api-test" />
