@@ -1,0 +1,11 @@
+{
+  "name": "@smart-doc-ui/type-generation",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smart-doc-group/smart-doc-ui"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
+}

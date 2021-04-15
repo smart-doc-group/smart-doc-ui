@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import { Select, Typography, MenuItem } from '@material-ui/core';
@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
+  const test = useTheme();
+  console.log(test);
 
   return (
     <>
@@ -29,6 +31,9 @@ const Header = () => {
           smart-doc
         </Button>
         <Typography variant="body1">
+          <Button size="small" variant="outlined">
+            Generate type
+          </Button>
           Select a spec
           <Select className={classes.select}>
             <MenuItem value={10}>test-stock-proj</MenuItem>
