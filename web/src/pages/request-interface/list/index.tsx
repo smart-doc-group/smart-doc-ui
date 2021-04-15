@@ -60,6 +60,7 @@ export interface IInfo {
 }
 
 const initData = (info: IInfo) => {
+  // The following code should be optimized, in terms of algorithm and type
   const { tags, paths } = info;
   const tempData: IDataItem[] = [];
   tags.forEach((i, index) => {
@@ -70,30 +71,30 @@ const initData = (info: IInfo) => {
     };
     for (const j in paths) {
       if (paths[j].get) {
-        if (paths[j].get.tags.includes(i.name)) {
+        if (paths[j].get!.tags.includes(i.name)) {
           tempData[index].paths.push({
-            ...paths[j].get,
+            ...paths[j].get!,
             path: j,
             method: 'get',
           });
         }
         if (paths[j].post) {
           tempData[index].paths.push({
-            ...paths[j].post,
+            ...paths[j].post!,
             path: j,
             method: 'post',
           });
         }
         if (paths[j].put) {
           tempData[index].paths.push({
-            ...paths[j].put,
+            ...paths[j].put!,
             path: j,
             method: 'put',
           });
         }
         if (paths[j].delete) {
           tempData[index].paths.push({
-            ...paths[j].delete,
+            ...paths[j].delete!,
             path: j,
             method: 'delete',
           });
@@ -112,6 +113,7 @@ const RequestInterfaceList = () => {
   const [, setCount] = useState(0);
 
   const handleClick = (dataItem: IDataItem) => {
+    console.log(dataItem);
     dataItem.collapsing = !dataItem.collapsing;
     setCount((p) => p + 1);
   };

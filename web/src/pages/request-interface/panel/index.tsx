@@ -1,31 +1,27 @@
-import { Drawer } from '@material-ui/core';
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { RequestInterfaceCtx } from '..';
-
-const useStyles = makeStyles({
-  list: {
-    width: 700,
-  },
-});
+import { Box, Drawer } from '@material-ui/core';
+import { RequestInterfaceCtx } from 'src/pages/request-interface';
+import RequestStatus from 'src/pages/request-interface/panel/components/RequestStatus';
 
 const RequestPanel = () => {
-  const classes = useStyles();
   const visible = useContext(RequestInterfaceCtx.getContext('panelStatus'))
     .visible;
   return (
-    <>
-      <Drawer
-        anchor={'right'}
-        elevation={100}
-        open={visible}
-        onClose={() => {
-          RequestInterfaceCtx.dispatch('updatePanelStatus', { visible: false });
-        }}
-      >
-        <div className={classes.list}>test</div>
-      </Drawer>
-    </>
+    <Drawer
+      anchor={'right'}
+      elevation={100}
+      style={{
+        width: 1000,
+      }}
+      open={visible || false}
+      onClose={() => {
+        RequestInterfaceCtx.dispatch('updatePanelStatus', { visible: false });
+      }}
+    >
+      <Box>
+        <RequestStatus />
+      </Box>
+    </Drawer>
   );
 };
 

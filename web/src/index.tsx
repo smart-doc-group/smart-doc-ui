@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import RouterView from './components/RouterView';
 import router from './router';

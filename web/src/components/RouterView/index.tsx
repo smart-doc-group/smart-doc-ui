@@ -11,7 +11,7 @@ const RouterView = ({ router = [] }: IRouterViewProps) => (
     {router.map((item) => {
       return (
         <Route path={item.path} key={item.path}>
-          <item.component router={item.children} />
+          <item.component router={item.children || []} />
         </Route>
       );
     })}

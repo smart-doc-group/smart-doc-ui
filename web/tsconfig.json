@@ -20,15 +20,16 @@
     "moduleResolution": "node",
     "noImplicitReturns": true,
     "resolveJsonModule": true,
-    "noImplicitThis": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "strict": false,
     "isolatedModules": true,
+    "strictNullChecks": true,
     "noUnusedParameters": true,
     "declarationDir": "dist",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true
+    "noEmit": true,
   },
   "include": [
     "src"

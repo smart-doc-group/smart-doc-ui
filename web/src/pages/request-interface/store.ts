@@ -3,8 +3,24 @@ type TPanelStatus = {
   params?: unknown;
 };
 
+interface IRequestData {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  data?: any;
+}
+
 /** The Store RequestInterface to control its related status */
 class RequestInterfaceStore {
+  curRequestData: IRequestData = {
+    method: 'GET',
+  };
+  requestDataMemory = {};
+  /**
+   * Update status of RequestPanel, including 'visible' and 'params'.
+   * @param {IRequestData} newVal - The new status of RequestPanel.
+   */
+  setRequestData(newVal: IRequestData) {
+    this.curRequestData = newVal;
+  }
   panelStatus: TPanelStatus = {
     visible: false,
   };
@@ -16,7 +32,5 @@ class RequestInterfaceStore {
     this.panelStatus = e;
   }
 }
-
-export type TRequestInterfaceStore = InstanceType<typeof RequestInterfaceStore>;
 
 export default RequestInterfaceStore;

@@ -1,10 +1,10 @@
 import { getConTexts, Provider } from 'easy-create-react-context';
 import React from 'react';
-import RequestInterfaceList from './list';
-import RequestPanel from './panel';
-import RequestInterfaceStore, { TRequestInterfaceStore } from './store';
+import RequestInterfaceList from 'src/pages/request-interface/list';
+import RequestPanel from 'src/pages/request-interface/panel';
+import RequestInterfaceStore from 'src/pages/request-interface/store';
 
-export const RequestInterfaceCtx = getConTexts<TRequestInterfaceStore>();
+export const RequestInterfaceCtx = getConTexts<RequestInterfaceStore>();
 
 const RequestInterface = () => {
   return (
