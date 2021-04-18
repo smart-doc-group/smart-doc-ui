@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "experimentalDecorators": true,
+    "outDir": "lib",
+    "target": "ES2018",
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "isolatedModules": false,
+    "strictNullChecks": true,
+    "noUnusedParameters": true,
+    "declarationDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+  },
+  "include": [ "src","__tests__", "mock-data" ],
+  "exclude": [
+    "node_modules",
+    "example",
+    "rollup.config.js"
+  ]
+}
