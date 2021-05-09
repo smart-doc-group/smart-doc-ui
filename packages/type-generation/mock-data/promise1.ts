@@ -499,6 +499,6 @@ const res1 = {
   },
 };
 
-module.exports = new Promise<typeof res1>((resolve) => {
+export = new Promise<typeof res1>((resolve) => {
   resolve(res1);
 });

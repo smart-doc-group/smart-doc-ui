@@ -3,8 +3,8 @@
     "baseUrl": ".",
     "experimentalDecorators": true,
     "outDir": "lib",
-    "target": "ES2018",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "CommonJS",
     "skipLibCheck": true,
     "lib": [
       "dom",

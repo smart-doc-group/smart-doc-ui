@@ -1,4 +1,4 @@
-const sum = (a: number = 0, b: number = 0) => a + b;
+import { sum } from '__tests__/temp';
 
 test('test', () => {
   expect(sum()).toBe(0);
