@@ -15,26 +15,29 @@ const types = async () => {
   fs.mkdirSync('models');
 
   const res = await types();
-  const typeTxt = await getTypeTxtArr(res);
-  generateTypeFiles(typeTxt);
+  const typeTxtArr = await getTypeTxtArr(res);
+
+  generateTypeFiles(typeTxtArr);
 })().catch((err) => {
   if (err) throw err;
 });
 
 /**
  * generate single or multiple type files.
- * @param {string} typeTxt the string format of type.
+ * @param {string} typeTxtArr the string format of type.
  */
 async function generateTypeFiles(typeTxtArr: { txt: string; name: string }[]) {
+  const ESLint = eslint.ESLint;
   // create type files
-  typeTxtArr.forEach((i) => {
+  typeTxtArr.forEach(async (i) => {
     fs.writeFileSync(`models/${i.name}.ts`, i.txt);
+    const results = await new ESLint({ fix: true }).lintFiles([
+      `models/${i.name}.ts`,
+    ]);
+    await ESLint.outputFixes(results);
   });
 
   // fix lint problems
-  const ESLint = eslint.ESLint;
-  const results = await new ESLint({ fix: true }).lintFiles(['models/test.ts']);
-  await ESLint.outputFixes(results);
 }
 
 /**
@@ -42,7 +45,10 @@ async function generateTypeFiles(typeTxtArr: { txt: string; name: string }[]) {
  * @param {TypeDefinitions} definitionsObject the object of related types.
  * @return {Promise<string>} the string format of definitions object
  */
-async function getTypeTxt(definitionsObject: TypeDefinitions): Promise<string> {
+async function getTypeTxtArr(
+  definitionsObject: TypeDefinitions
+): Promise<{ txt: string; name: string }[]> {
+  const exportArr: string[] = [];
   const formatTypeMap = {
     integer: (_item: TypeMap) => 'number',
     boolean: (_item: TypeMap) => 'boolean',
@@ -53,42 +59,52 @@ async function getTypeTxt(definitionsObject: TypeDefinitions): Promise<string> {
         return item.enum.map((i) => `'${i}'`).join(' | ');
       }
     },
-    $ref: (item: RefType) => item.$ref.slice(14),
+    originalRef: (item: RefType) => {
+      exportArr.push(item.originalRef);
+      return item.originalRef;
+    },
     object: (_item: TypeMap) => {
       return '{}';
     },
     array: (item: ArrayType) => {
-      // @ts-ignore
-      const itemStringType: string = formatTypeMap[item.items.type || '$ref'](
+      let itemStringType = '';
+      itemStringType = formatTypeMap[item.items.type || 'originalRef'](
         // @ts-ignore
         item.items
       );
       return `${itemStringType}[]`;
     },
   };
-  const typeTxtArr = [];
-  let tempTypeTxt = '';
-  const commonString = 'export type T = {';
+  const typeTxtArr: { txt: string; name: string }[] = [];
   for (const i in definitionsObject) {
-    if (
-      i === 'IPaged«CassWidgetVo»' &&
-      definitionsObject[i].type === 'object'
-    ) {
+    if (definitionsObject.hasOwnProperty(i)) {
+      const name = i.replace(/«(.*)»/g, '$1');
+      let tempTypeTxt = `export type ${name} = {`;
       const tempObj = definitionsObject[i] as ObjectType;
-      tempTypeTxt += commonString;
-      // eslint-disable-next-line guard-for-in
       for (const j in tempObj.properties) {
-        const { type, description } = tempObj.properties[j];
-        if (type) {
+        if (tempObj.properties.hasOwnProperty(j)) {
+          const { type, description } = tempObj.properties[j];
           if (description) tempTypeTxt += `\n  // ${description}`;
-          tempTypeTxt += `\n  ${j}?: ${formatTypeMap[type || '$ref'](
+          tempTypeTxt += `\n  ${j}?: ${formatTypeMap[type || 'originalRef'](
             // @ts-ignore
             tempObj.properties[j]
           )};`;
         }
       }
+      if (exportArr.length) {
+        const unique = [...new Set(exportArr)];
+        let exportTxt = '';
+        unique.forEach((name) => {
+          exportTxt += `import { ${name} } from './${name}'\n`;
+        });
+        tempTypeTxt = exportTxt + '\n' + tempTypeTxt;
+      }
+      tempTypeTxt += '\n};\n';
+      typeTxtArr.push({
+        name,
+        txt: tempTypeTxt,
+      });
     }
   }
-  tempTypeTxt += '\n};\n';
-  return tempTypeTxt;
+  return typeTxtArr;
 }

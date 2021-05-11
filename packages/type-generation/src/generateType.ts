@@ -29,7 +29,7 @@ export interface StringType extends CommonType {
 
 export interface RefType extends CommonType {
   type: null;
-  $ref: string;
+  originalRef: string;
 }
 
 export interface ObjectType extends CommonType {

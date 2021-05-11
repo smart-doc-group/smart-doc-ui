@@ -477,6 +477,14 @@ const res1 = {
         extra_num: { type: 'integer', format: 'int32' },
         has_next_page: { type: 'boolean' },
         has_prev_page: { type: 'boolean' },
+        test1: {
+          originalRef: 'CassWidgetVo',
+          $ref: '#/definitions/CassWidgetVo',
+        },
+        test2: {
+          originalRef: 'CassAppVo',
+          $ref: '#/definitions/CassAppVo',
+        },
         list: {
           type: 'array',
           items: {
