@@ -1,4 +1,3 @@
-import { ArrayType, RefType, StringType } from './generateType';
 import fs = require('fs');
 import promise1 = require('../mock-data/promise1');
 import eslint = require('eslint');
@@ -31,10 +30,10 @@ async function generateTypeFiles(typeTxtArr: { txt: string; name: string }[]) {
   // create type files
   typeTxtArr.forEach(async (i) => {
     fs.writeFileSync(`models/${i.name}.ts`, i.txt);
-    const results = await new ESLint({ fix: true }).lintFiles([
-      `models/${i.name}.ts`,
-    ]);
-    await ESLint.outputFixes(results);
+    // const results = await new ESLint({ fix: true }).lintFiles([
+    //   `models/${i.name}.ts`,
+    // ]);
+    // await ESLint.outputFixes(results);
   });
 
   // fix lint problems
@@ -48,31 +47,57 @@ async function generateTypeFiles(typeTxtArr: { txt: string; name: string }[]) {
 async function getTypeTxtArr(
   definitionsObject: TypeDefinitions
 ): Promise<{ txt: string; name: string }[]> {
-  const exportArr: string[] = [];
+  let exportArr: string[] = [];
   const formatTypeMap = {
     integer: (_item: TypeMap) => 'number',
     boolean: (_item: TypeMap) => 'boolean',
-    string: (item: StringType) => {
-      if (!item.enum) {
-        return 'string';
+    string: (item: TypeMap) => {
+      if (item.type === 'string') {
+        if (!item.enum) {
+          return 'string';
+        } else {
+          return item.enum.map((i) => `'${i}'`).join(' | ');
+        }
       } else {
-        return item.enum.map((i) => `'${i}'`).join(' | ');
+        return 'unknown';
       }
     },
-    originalRef: (item: RefType) => {
-      exportArr.push(item.originalRef);
-      return item.originalRef;
+    originalRef: (item: TypeMap) => {
+      if (!item.type) {
+        exportArr.push(item.originalRef);
+        return item.originalRef;
+      } else {
+        return 'unknown';
+      }
     },
-    object: (_item: TypeMap) => {
-      return '{}';
+    object: (item: TypeMap) => {
+      if (item.type === 'object') {
+        let itemStringType = '{';
+        const p = item.properties;
+        for (const i in p) {
+          if (p.hasOwnProperty(i)) {
+            const { type, description } = p[i];
+            if (description) itemStringType += `\n    // ${description}`;
+            itemStringType += `\n    ${i}?: ${formatTypeMap[
+              type || 'originalRef'
+            ](p[i])};`;
+          }
+        }
+        itemStringType += '\n  }';
+        return itemStringType;
+      } else {
+        return 'unknown';
+      }
     },
-    array: (item: ArrayType) => {
-      let itemStringType = '';
-      itemStringType = formatTypeMap[item.items.type || 'originalRef'](
-        // @ts-ignore
-        item.items
-      );
-      return `${itemStringType}[]`;
+    array: (item: TypeMap) => {
+      if (item.type === 'array') {
+        let itemStringType = '';
+        const temp = item.items.type || 'originalRef';
+        itemStringType = formatTypeMap[temp](item.items);
+        return `${itemStringType}[]`;
+      } else {
+        return 'unknown';
+      }
     },
   };
   const typeTxtArr: { txt: string; name: string }[] = [];
@@ -86,19 +111,22 @@ async function getTypeTxtArr(
           const { type, description } = tempObj.properties[j];
           if (description) tempTypeTxt += `\n  // ${description}`;
           tempTypeTxt += `\n  ${j}?: ${formatTypeMap[type || 'originalRef'](
-            // @ts-ignore
             tempObj.properties[j]
           )};`;
         }
       }
-      if (exportArr.length) {
-        const unique = [...new Set(exportArr)];
+      const noOwnExportArr = exportArr.filter((i) => i !== name);
+
+      if (noOwnExportArr.length) {
+        const unique = [...new Set(noOwnExportArr)];
         let exportTxt = '';
         unique.forEach((name) => {
-          exportTxt += `import { ${name} } from './${name}'\n`;
+          exportTxt += `import { ${name} } from './${name}';\n`;
         });
-        tempTypeTxt = exportTxt + '\n' + tempTypeTxt;
+        exportTxt += '\n';
+        tempTypeTxt = exportTxt + tempTypeTxt;
       }
+      exportArr = [];
       tempTypeTxt += '\n};\n';
       typeTxtArr.push({
         name,

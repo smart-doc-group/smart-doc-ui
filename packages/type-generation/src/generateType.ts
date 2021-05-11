@@ -14,6 +14,15 @@ export interface TypeDefinitions {
   [x: string]: TypeMap;
 }
 
+export interface TypeObject {
+  integer: NumberType;
+  boolean: BooleanType;
+  string: StringType;
+  originalRef: RefType;
+  object: ObjectType;
+  array: ArrayType;
+}
+
 export interface NumberType extends CommonType {
   type: 'integer';
 }

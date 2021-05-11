@@ -451,6 +451,10 @@ const res1 = {
         icon_url: { type: 'string' },
         id: { type: 'integer', format: 'int64' },
         status: { type: 'integer', format: 'int32' },
+        test2: {
+          originalRef: 'CassAppVo',
+          $ref: '#/definitions/CassAppVo',
+        },
       },
       title: 'CassAppVo',
     },
@@ -466,6 +470,24 @@ const res1 = {
         update_user_id: { type: 'string' },
         updated_at: { type: 'integer', format: 'int64' },
         widget_name: { type: 'string' },
+        testObj: {
+          type: 'object',
+          properties: {
+            create_user_id: { type: 'string' },
+            force_flag: {
+              type: 'integer',
+              format: 'int32',
+              description: '是否强制更新 0：否、1：是',
+            },
+            id: { type: 'integer', format: 'int64' },
+            issue_status: {
+              type: 'string',
+              description:
+                '发布状态，1：已发布，0：未发布， 安卓6家应用市场，需转成二进制判断每一位，顺序：应用宝、华为、小米、魅族、OPPO、VIVO',
+            },
+            widget_type: { type: 'string', enum: ['H5', 'MINI_APP'] },
+          },
+        },
         widget_type: { type: 'string', enum: ['H5', 'MINI_APP'] },
       },
       title: 'CassWidgetVo',

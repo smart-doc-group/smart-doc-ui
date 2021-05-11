@@ -8,4 +8,5 @@ export type CassAppVo = {
   icon_url?: string;
   id?: number;
   status?: number;
+  test2?: CassAppVo;
 };
