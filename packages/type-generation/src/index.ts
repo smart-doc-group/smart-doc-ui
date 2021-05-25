@@ -1,8 +1,6 @@
-#!/usr/bin/env node
-
-import fs = require('fs');
-import promise1 = require('../mock-data/promise1');
-import eslint = require('eslint');
+import fs from 'fs';
+import promise1 from '../mock-data/promise1';
+import eslint from 'eslint';
 import { ObjectType, TypeDefinitions, TypeMap } from 'src/generateType';
 
 const apiReq = async () => {

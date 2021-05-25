@@ -531,8 +531,9 @@ const res1 = {
   },
 };
 
-export = new Promise<any>((resolve) => {
-  axios.get('http:///api-docs').then((res) => {
-    resolve(res.data);
-  });
+export default new Promise<any>((resolve) => {
+  // axios.get('http:///api-docs').then((res) => {
+  //   resolve(res.data);
+  // });
+  resolve(res1);
 });
