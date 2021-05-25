@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 export type TypeMap =
   | NumberType
   | BooleanType
@@ -16,6 +15,7 @@ export interface TypeDefinitions {
 
 export interface TypeObject {
   integer: NumberType;
+  number: NumberType;
   boolean: BooleanType;
   string: StringType;
   originalRef: RefType;
@@ -24,7 +24,7 @@ export interface TypeObject {
 }
 
 export interface NumberType extends CommonType {
-  type: 'integer';
+  type: 'integer' | 'number';
 }
 
 export interface BooleanType extends CommonType {

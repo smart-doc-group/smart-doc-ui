@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const res1 = {
   swagger: '2.0',
   info: {
@@ -529,6 +531,8 @@ const res1 = {
   },
 };
 
-export = new Promise<typeof res1>((resolve) => {
-  resolve(res1);
+export = new Promise<any>((resolve) => {
+  axios.get('http:///api-docs').then((res) => {
+    resolve(res.data);
+  });
 });

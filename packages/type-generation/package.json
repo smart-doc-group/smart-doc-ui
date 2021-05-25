@@ -6,10 +6,15 @@
     "url": "https://github.com/smart-doc-group/smart-doc-ui"
   },
   "scripts": {
-    "start": "npx ts-node ./src/index.ts",
+    "build": "npx ts-node ./src/index.ts",
     "test": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "axios": "^0.21.1"
+  },
+  "bin": {
+    "@smart-doc-ui/type-generation": "npx ts-node ./src/index.ts"
+  },
   "devDependencies": {
     "@types/eslint": "^7.2.10",
     "@types/jest": "^26.0.22",
