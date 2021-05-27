@@ -18,9 +18,8 @@ module.exports = {
       'error',
       { semi: true, endOfLine: 'auto', singleQuote: true },
     ],
-    'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
-    'no-console': process.env.NODE_ENV === 'production' ? 2 : 1,
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 2 : 1,
+    'no-console': process.env.NODE_ENV === 'prod' ? 2 : 1,
+    'no-unused-vars': process.env.NODE_ENV === 'prod' ? 2 : 1,
   },
   ignorePatterns: ['dist', 'build', 'lib'],
 };

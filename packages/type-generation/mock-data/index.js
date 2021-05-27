@@ -1,6 +1,6 @@
-import axios from 'axios';
-
-const res1 = {
+export const fetchDataRes = {
+  dir: 'src/models/app',
+  name: 'saas-app-application',
   swagger: '2.0',
   info: {
     description: 'Api Documentation',
@@ -530,10 +530,3 @@ const res1 = {
     },
   },
 };
-
-export default new Promise<any>((resolve) => {
-  // axios.get('http:///api-docs').then((res) => {
-  //   resolve(res.data);
-  // });
-  resolve(res1);
-});

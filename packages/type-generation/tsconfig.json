@@ -30,10 +30,12 @@
     "noFallthroughCasesInSwitch": true,
     "noEmit": true,
   },
-  "include": [ "src","__tests__", "mock-data" ],
+  "include": [ "src" ],
   "exclude": [
+    "__tests__",
+    "mock-data",
     "node_modules",
-    "example",
-    "rollup.config.js"
+    "rollup.config.js",
+    "*/models"
   ]
 }

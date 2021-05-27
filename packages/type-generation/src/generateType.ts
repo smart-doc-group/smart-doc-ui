@@ -10,7 +10,7 @@ export type CommonType = {
 };
 
 export interface TypeDefinitions {
-  [x: string]: TypeMap;
+  [x: string]: ObjectType;
 }
 
 export interface TypeObject {
