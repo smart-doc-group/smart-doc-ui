@@ -1,7 +1,7 @@
 module.exports = {
-  roots: ['<rootDir>/__tests__'],
-  testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(test).+(ts|tsx|js)'],
+  testMatch: ['<rootDir>/__tests__/**/*.spec.(ts|tsx|js)'],
   transform: {
     '^.+\\.(ts|tsx|js)$': 'ts-jest',
   },
+  collectCoverageFrom: ['src/*.(js|ts)', '!**/node_modules/**'],
 };
