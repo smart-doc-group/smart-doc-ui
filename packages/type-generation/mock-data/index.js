@@ -13,7 +13,7 @@ export const fetchDataRes = {
       url: 'http://www.apache.org/licenses/LICENSE-2.0',
     },
   },
-  host: '10.118.72.81:22768',
+  host: '127.0.0.1',
   basePath: '/',
   tags: [
     { name: 'widget-controller', description: 'Widget Controller' },
